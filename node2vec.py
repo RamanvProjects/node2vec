@@ -1,7 +1,7 @@
+from gensim.models import Word2Vec
 import numpy as np
 import networkx as nx
 import random
-
 
 class Graph():
 	def __init__(self, nx_G, is_directed, p, q):
@@ -147,3 +147,21 @@ def alias_draw(J, q):
 	    return kk
 	else:
 	    return J[kk]
+
+def learn_embeddings(walks):
+	'''
+	Learn embeddings by optimizing the Skipgram objective using SGD.
+	'''
+	walks = [map(str, walk) for walk in walks]
+	model = Word2Vec(walks, size=128, window=10, min_count=0, sg=1, workers=8, iter=1)
+
+	return model.wv
+
+def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length):
+	'''
+	Pipeline for representational learning for all nodes in a graph.
+	'''
+	G = Graph(nx_G, is_directed, p, q)
+	G.preprocess_transition_probs()
+	walks = G.simulate_walks(num_walks, walk_length)
+	return learn_embeddings(walks)
