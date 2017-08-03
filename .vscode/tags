@@ -6,24 +6,28 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 Graph	../node2vec.py	/^class Graph():$/;"	kind:class	line:6
 Word2Vec	../main.py	/^from gensim.models import Word2Vec$/;"	kind:namespace	line:16
+Word2Vec	../node2vec.py	/^from gensim.models import Word2Vec$/;"	kind:namespace	line:1
 __init__	../node2vec.py	/^	def __init__(self, nx_G, is_directed, p, q):$/;"	kind:member	line:7
+__init__.py	../__init__.py	1;"	kind:file	line:1
 alias_draw	../node2vec.py	/^def alias_draw(J, q):$/;"	kind:function	line:139
 alias_setup	../node2vec.py	/^def alias_setup(probs):$/;"	kind:function	line:107
 argparse	../main.py	/^import argparse$/;"	kind:namespace	line:12
 args	../main.py	/^	args = parse_args()$/;"	kind:variable	line:103
 get_alias_edge	../node2vec.py	/^	def get_alias_edge(self, src, dst):$/;"	kind:member	line:55
+get_embeddings	../node2vec.py	/^def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length):$/;"	kind:function	line:160
 learn_embeddings	../main.py	/^def learn_embeddings(walks):$/;"	kind:function	line:82
+learn_embeddings	../node2vec.py	/^def learn_embeddings(walks):$/;"	kind:function	line:151
 main	../main.py	/^def main(args):$/;"	kind:function	line:92
 main.py	../main.py	1;"	kind:file	line:1
 node2vec	../main.py	/^import node2vec$/;"	kind:namespace	line:15
 node2vec.py	../node2vec.py	1;"	kind:file	line:1
 node2vec_walk	../node2vec.py	/^	def node2vec_walk(self, walk_length, start_node):$/;"	kind:member	line:13
 np	../main.py	/^import numpy as np$/;"	kind:namespace	line:13
-np	../node2vec.py	/^import numpy as np$/;"	kind:namespace	line:1
+np	../node2vec.py	/^import numpy as np$/;"	kind:namespace	line:2
 nx	../main.py	/^import networkx as nx$/;"	kind:namespace	line:14
-nx	../node2vec.py	/^import networkx as nx$/;"	kind:namespace	line:2
+nx	../node2vec.py	/^import networkx as nx$/;"	kind:namespace	line:3
 parse_args	../main.py	/^def parse_args():$/;"	kind:function	line:18
 preprocess_transition_probs	../node2vec.py	/^	def preprocess_transition_probs(self):$/;"	kind:member	line:76
-random	../node2vec.py	/^import random$/;"	kind:namespace	line:3
+random	../node2vec.py	/^import random$/;"	kind:namespace	line:4
 read_graph	../main.py	/^def read_graph():$/;"	kind:function	line:66
 simulate_walks	../node2vec.py	/^	def simulate_walks(self, num_walks, walk_length):$/;"	kind:member	line:39

@@ -1,10 +1,15 @@
 from gensim.models import Word2Vec
+from networkx import DiGraph
 import numpy as np
 import networkx as nx
 import random
 
 class Graph():
 	def __init__(self, nx_G, is_directed, p, q):
+		"""
+		:param nx_G: Networkx graph
+		:type nx_G: DiGraph
+		"""
 		self.G = nx_G
 		self.is_directed = is_directed
 		self.p = p
@@ -36,10 +41,42 @@ class Graph():
 
 		return walk
 
-	def simulate_walks(self, num_walks, walk_length):
+	def pagerank_walk(self, start_node, num_walks, walk_length, alpha):
+		'''
+		Perform PageRank walk, with restart probability alpha
+		'''
+		G = self.G
+		alias_nodes = self.alias_nodes
+		alias_edges = self.alias_edges
+
+		walk = [start_node]
+
+		while len(walk) < walk_length:
+			cur = walk[-1]
+			neighbors = sorted(G.neighbors(cur))
+
+			if len(neighbors) == 0:
+				# TODO(vramanuj) Should return to start node?
+				break
+
+			cont = np.random.rand()
+
+			if cont < alpha:
+				# Restart
+				walk.append(start_node)
+			else:
+				# Random walk with uniform probability
+				# TODO(vramanuj) Take acount of weights for these?
+				walk.append(random.choice(neighbors))
+		
+		return walk
+
+	def simulate_walks(self, num_walks, walk_length, alpha=0.1, pagerank_walk=False):
 		'''
 		Repeatedly simulate random walks from each node.
 		'''
+
+		walk_type = self.node2vec_walk if not pagerank_walk else self.pagerank_walk
 		G = self.G
 		walks = []
 		nodes = list(G.nodes())
@@ -48,7 +85,7 @@ class Graph():
 			print str(walk_iter+1), '/', str(num_walks)
 			random.shuffle(nodes)
 			for node in nodes:
-				walks.append(self.node2vec_walk(walk_length=walk_length, start_node=node))
+				walks.append(walk_type(walk_length=walk_length, start_node=node, alpha=alpha))
 
 		return walks
 
@@ -157,11 +194,11 @@ def learn_embeddings(walks):
 
 	return model.wv
 
-def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length):
+def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length, pagerank_walk):
 	'''
 	Pipeline for representational learning for all nodes in a graph.
 	'''
 	G = Graph(nx_G, is_directed, p, q)
 	G.preprocess_transition_probs()
-	walks = G.simulate_walks(num_walks, walk_length)
+	walks = G.simulate_walks(num_walks, walk_length, pagerank_walk=pagerank_walk)
 	return learn_embeddings(walks)
