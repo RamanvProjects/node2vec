@@ -15,7 +15,7 @@ class Graph():
 		self.p = p
 		self.q = q
 
-	def node2vec_walk(self, walk_length, start_node):
+	def node2vec_walk(self, walk_length, start_node, alpha=None):
 		'''
 		Simulate a random walk starting from start node.
 		'''
@@ -41,7 +41,7 @@ class Graph():
 
 		return walk
 
-	def pagerank_walk(self, start_node, num_walks, walk_length, alpha):
+	def pagerank_walk(self, start_node, walk_length, alpha):
 		'''
 		Perform PageRank walk, with restart probability alpha
 		'''
@@ -194,11 +194,11 @@ def learn_embeddings(walks):
 
 	return model.wv
 
-def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length, pagerank_walk):
+def get_embeddings(nx_G, is_directed, p, q, num_walks, walk_length, pagerank_walk, alpha):
 	'''
 	Pipeline for representational learning for all nodes in a graph.
 	'''
 	G = Graph(nx_G, is_directed, p, q)
 	G.preprocess_transition_probs()
-	walks = G.simulate_walks(num_walks, walk_length, pagerank_walk=pagerank_walk)
+	walks = G.simulate_walks(num_walks, walk_length, pagerank_walk=pagerank_walk, alpha=alpha)
 	return learn_embeddings(walks)
